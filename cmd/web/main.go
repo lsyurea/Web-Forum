@@ -6,13 +6,26 @@ import (
 	"github.com/lsyurea/Web-application-with-go/pkg/handlers"
 	"github.com/lsyurea/Web-application-with-go/pkg/config"
 	"github.com/lsyurea/Web-application-with-go/pkg/render"
+	"github.com/alexedwards/scs/v2"
+	"time"
 )
 
 const portNumber = ":8080"
-
+var app config.AppConfig
+var session *scs.SessionManager
 
 func main() {
-	var app config.AppConfig
+	
+	//change this to true when in production
+	app.InProduction = false
+
+	//created session
+	session = scs.New()
+	session.Lifetime = 24 * time.Hour
+	session.Cookie.Persist = true
+	session.Cookie.SameSite = http.SameSiteLaxMode
+	session.Cookie.Secure = app.InProduction
+	app.Session = session
 
 	tc, err := render.CreateTemplateCache()
 	if err != nil {
@@ -29,10 +42,13 @@ func main() {
 	render.NewTemplates(&app)
 
 	fmt.Print("Starting the application on port ", portNumber, "")
-	http.HandleFunc("/", handlers.Repo.Home)
-	http.HandleFunc("/about", handlers.Repo.About)
-	errs := http.ListenAndServe(portNumber, nil)
-	if errs != nil {
-		fmt.Println(errs)
+	
+	srv := &http.Server{
+		Addr: portNumber,
+		Handler: routes(&app),
+	}
+	err = srv.ListenAndServe()
+	if err != nil {
+		fmt.Println(err)
 	}
 }
