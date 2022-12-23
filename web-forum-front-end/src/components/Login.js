@@ -9,21 +9,48 @@ function Login() {
     const {setJwtToken} = useOutletContext();
     const {setAlertClassName} = useOutletContext();
     const {setAlertMessage} = useOutletContext();
+    const {toggleRefresh} = useOutletContext();
 
     const navigate = useNavigate();
 
     //shows error message if username or password is incorrect
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (username === "admin" && password === "admin") {
-            setJwtToken("admin");
-            setAlertClassName("d-none");
-            setAlertMessage("");
-            navigate("/news"); //redirects to news page
-        } else {
-            setAlertClassName("alert-danger");
-            setAlertMessage("Invalid username or password");
+        
+        //build request payload
+        let payload = {
+            username: username,
+            password: password
         }
+
+        const requestOptions = {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            credentials: 'include',
+            body: JSON.stringify(payload),
+        }
+        fetch(`/authenticate`, requestOptions)
+        .then(response => {
+            // console.log("response", response)    for debugging
+            return response.json()})
+        .then(data => {
+            if (data.error) {
+                setAlertClassName("alert-danger");
+                setAlertMessage(data.message);
+            }
+            else {
+                // console.log("data", data)    for debugging
+                setJwtToken(data.access_token);
+                setAlertClassName("d-none");
+                setAlertMessage("");
+                toggleRefresh(true);
+                navigate("/news");
+            }
+        })
+        .catch(error => {
+            setAlertClassName("alert-danger");
+            setAlertMessage("Error: " + error);
+        })
     }
 
     return (
@@ -50,8 +77,8 @@ function Login() {
             </div>
         </div>
        
-        <div class="d-flex justify-content-center">
-            <a href="/home"><button class="btn btn-secondary">Login</button></a>
+        <div className="d-flex justify-content-center">
+            <a href="/home"><button className="btn btn-secondary">Login</button></a>
         </div>
 
     </form>);
