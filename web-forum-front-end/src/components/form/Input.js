@@ -8,7 +8,7 @@ const Input = forwardRef((props, ref) => {
             </label>
             <input
                 type={props.type}
-                className={props.className}
+                className="form-control"
                 id={props.name}
                 ref={ref}
                 name={props.name}

@@ -91,8 +91,8 @@ return (
         <ul className="nav">
           <li className="nav-item">
             {jwtToken === ""
-            ? <Link to="/" className="nav-link hover-white">Login</Link>
-            : <a href="/" onClick={logOut}><span className="nav-link hover-white">Logout</span></a>
+            ? <Link to="/login" className="nav-link hover-white">Login</Link>
+            : <a href="/login" onClick={logOut}><span className="nav-link hover-white">Logout</span></a>
             }
             
           </li>
@@ -102,7 +102,10 @@ return (
         </ul>
         <ul className="nav">
           <li className="nav-item">
-            <Link to="/news" className="nav-link hover-white" >Latest News</Link>
+            <Link to="/" className="nav-link hover-white" >My Posts</Link>
+          </li>
+          <li className="nav-item">
+            <Link to="/" className="nav-link hover-white" >Latest News</Link>
           </li>
         </ul>
       </nav>

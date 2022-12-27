@@ -15,11 +15,25 @@ func (app *application) routes() http.Handler {
 
 	mux.Get("/", app.Home)
 
+	// Get parameters are visible, but not secure; post request is used for authentication
 	mux.Post("/authenticate", app.authenticate)
 	
+	// Cookies
 	mux.Get("/refresh", app.refreshToken)
 	mux.Get("/logout", app.logout)
+
+	// Posts
+	mux.Get("/posts", app.AllPosts)
+	mux.Get("/posts/genres/{id}", app.AllPostsByGenre)
 	
-	mux.Get("/posts", app.GetPosts)
+
+	// logged in user routes
+	mux.Route("/logged", func(mux chi.Router) {
+		mux.Use(app.authRequired)
+
+		// logged routes
+		
+	})
+
 	return mux
 }

@@ -31,5 +31,6 @@ a {
 
  .hover-fill:hover {
     background-color: #C4E9E3;
-    color: #fff;
+    color: #0699a9;
+    font-weight: bold;
  }

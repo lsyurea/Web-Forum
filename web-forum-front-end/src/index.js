@@ -5,7 +5,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import ErrorPage from './components/ErrorPage';
 import Login from './components/Login';
 import Create from './components/Create';
-import News from './components/News';
+import Posts from './components/Posts';
 
 const router = createBrowserRouter([
   {
@@ -13,15 +13,15 @@ const router = createBrowserRouter([
     element: <App />,
     errorElement: <ErrorPage />,
     children: [
-      {index: true, element: <Login />},
+      {index: true, element: <Posts />},
       {
         path: '/create',
         element: <Create />,
       },
       {
-        path: '/news',
-        element: <News />,
-      }
+        path: '/login',
+        element: <Login />,
+      },
     ]
   }
 ])

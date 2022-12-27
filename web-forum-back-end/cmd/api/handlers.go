@@ -1,10 +1,12 @@
 package main
 
 import (
+	"backend/internal/models"
 	"errors"
 	"net/http"
 	"strconv"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/golang-jwt/jwt/v4"
 )
 
@@ -22,7 +24,7 @@ func (app *application) Home(w http.ResponseWriter, r *http.Request) {
 	_ = app.writeJSON(w, http.StatusOK, payload)
 }
 
-func (app *application) GetPosts(w http.ResponseWriter, r *http.Request) {
+func (app *application) AllPosts(w http.ResponseWriter, r *http.Request) {
 	posts, err := app.DB.GetPosts()
 
 	if err != nil {
@@ -129,4 +131,73 @@ func (app *application) refreshToken(w http.ResponseWriter, r *http.Request) {
 func (app *application) logout(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, app.auth.GetExpiredRefreshCookie())
 	w.WriteHeader(http.StatusAccepted)
+}
+
+func (app *application) PostCatalog(w http.ResponseWriter, r *http.Request) {
+	posts, err := app.DB.GetPosts()
+
+	if err != nil {
+		app.errorJSON(w, err)
+	}
+
+	_ = app.writeJSON(w, http.StatusOK, posts)
+}
+
+
+
+
+func (app *application) AllPostsByGenre(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	posts, err := app.DB.GetPosts(id)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	app.writeJSON(w, http.StatusOK, posts)
+}
+
+
+
+func (app *application) GetPost(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+	postID, err := strconv.Atoi(id)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	post, err := app.DB.GetPostByID(postID)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	_ = app.writeJSON(w, http.StatusOK, post)
+
+}
+
+func (app *application) PostForEdit(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+	postID, err := strconv.Atoi(id)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+	post, genres, err := app.DB.GetPostAndGenresByID(postID)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	var payload = struct {
+		Post   *models.Post    `json:"post"`
+		Genres []*models.Genre `json:"genres"`
+	}{
+		post,
+		genres,
+	}
+	_ = app.writeJSON(w, http.StatusOK, payload)
+
 }

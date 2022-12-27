@@ -44,7 +44,7 @@ function Login() {
                 setAlertClassName("d-none");
                 setAlertMessage("");
                 toggleRefresh(true);
-                navigate("/news");
+                navigate("/");
             }
         })
         .catch(error => {
