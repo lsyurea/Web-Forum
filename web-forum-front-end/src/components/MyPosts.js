@@ -35,7 +35,7 @@ function MyPosts() {
 
     const loadPost = (
         <div>
-            {posts.map(p => (
+            {posts && posts.map(p => (
             <div className="card" key={p.id} style={{width: "100%", backgroundColor: "#F2F2F2", borderRadius: "10px", marginTop: "10px"}}>
                 <div className="card-body">
                     <Link to={`/${p.id}`} className="card-title" style={{color: "#3EC1D0", fontWeight: "bold"}}>{p.title}</Link>

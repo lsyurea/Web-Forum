@@ -166,9 +166,9 @@ func (m *PostgresDBRepo) GetPostsFromUser(id int) ([]*models.Post, error) {
 	defer cancel()
 
 
-	query := `select p.id, p.title, p.content, p.image, p.created_at, p.updated_at from posts_genres_users pgu
-	right join posts p on (pgu.id = p.id)
-	where pgu.user_id = $1
+	query := `select p.* from posts p
+	inner join posts_users pu on (pu.id = p.id)
+	where pu.user_id = $1
 	order by p.updated_at desc`
 
 	rows, err := m.DB.QueryContext(ctx, query, id)
