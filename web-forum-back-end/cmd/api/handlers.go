@@ -133,33 +133,48 @@ func (app *application) logout(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusAccepted)
 }
 
-func (app *application) PostCatalog(w http.ResponseWriter, r *http.Request) {
-	posts, err := app.DB.GetPosts()
+// func (app *application) PostCatalog(w http.ResponseWriter, r *http.Request) {
+// 	posts, err := app.DB.GetPosts()
 
+// 	if err != nil {
+// 		app.errorJSON(w, err)
+// 	}
+
+// 	_ = app.writeJSON(w, http.StatusOK, posts)
+// }
+
+
+
+
+// func (app *application) AllPostsByGenre(w http.ResponseWriter, r *http.Request) {
+// 	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+// 	if err != nil {
+// 		app.errorJSON(w, err)
+// 		return
+// 	}
+// 	posts, err := app.DB.GetPosts(id)
+// 	if err != nil {
+// 		app.errorJSON(w, err)
+// 		return
+// 	}
+// 	app.writeJSON(w, http.StatusOK, posts)
+// }
+
+
+func (app *application) AllPostsByUser(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+	userID, err := strconv.Atoi(id)
 	if err != nil {
 		app.errorJSON(w, err)
+		return
 	}
-
+	posts, err := app.DB.GetPostsFromUser(userID)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
 	_ = app.writeJSON(w, http.StatusOK, posts)
 }
-
-
-
-
-func (app *application) AllPostsByGenre(w http.ResponseWriter, r *http.Request) {
-	id, err := strconv.Atoi(chi.URLParam(r, "id"))
-	if err != nil {
-		app.errorJSON(w, err)
-		return
-	}
-	posts, err := app.DB.GetPosts(id)
-	if err != nil {
-		app.errorJSON(w, err)
-		return
-	}
-	app.writeJSON(w, http.StatusOK, posts)
-}
-
 
 
 func (app *application) GetPost(w http.ResponseWriter, r *http.Request) {
@@ -169,7 +184,7 @@ func (app *application) GetPost(w http.ResponseWriter, r *http.Request) {
 		app.errorJSON(w, err)
 		return
 	}
-	post, err := app.DB.GetPostByID(postID)
+	post, err := app.DB.OnePost(postID)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -185,7 +200,7 @@ func (app *application) PostForEdit(w http.ResponseWriter, r *http.Request) {
 		app.errorJSON(w, err)
 		return
 	}
-	post, genres, err := app.DB.GetPostAndGenresByID(postID)
+	post, genres, err := app.DB.OnePostForEdit(postID)
 	if err != nil {
 		app.errorJSON(w, err)
 		return

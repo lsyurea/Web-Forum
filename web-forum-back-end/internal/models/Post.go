@@ -11,7 +11,8 @@ type Post struct {
 	Image       string    `json:"image"`
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
-	Genres      []*Genre   `json:"genres,omitempty"`
+	Username    string    `json:"username"`
+	Genres      []*Genre  `json:"genres,omitempty"`
 	GenresArray []int     `json:"genres_array,omitempty"`
 }
 

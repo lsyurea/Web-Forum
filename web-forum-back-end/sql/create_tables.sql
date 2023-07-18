@@ -77,15 +77,30 @@ ALTER TABLE public.posts ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
 
 -- posts_genres_users structure (relationship between posts and genres and users)
 
-CREATE TABLE public.posts_genres_users (
+CREATE TABLE public.posts_users (
     id integer NOT NULL,
     post_id integer,
-    genre_id integer,
     user_id integer
 );
 
-ALTER TABLE public.posts_genres_users ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME public.posts_genres_users_id_seq
+ALTER TABLE public.posts_users ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.posts_users_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+CREATE TABLE public.posts_genres (
+    id integer NOT NULL,
+    post_id integer,
+    genre_id integer
+);
+
+
+ALTER TABLE public.posts_genres ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.posts_genres_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -131,16 +146,22 @@ COPY public.users (id, username, password, created_at, updated_at) FROM stdin;
 1	admin	$2a$10$IaezaSlSZMOiVhlfa.ST2eWd47POSLIztZykmz0Q0AbaLhagRB0Fe	2022-12-23 00:00:00	2022-12-23 00:00:00
 \.
 
+-- posts_users data (Relationship between posts and users) created by admin
+COPY public.posts_users (id, post_id, user_id) FROM STDIN WITH (FORMAT CSV, HEADER FALSE);
+1,1,1
+2,2,1
+3,3,1
+\.
 
 -- posts_genres data (Relationship between posts and genres) created by admin
 
-COPY public.posts_genres_users (id, post_id, genre_id, user_id) FROM STDIN WITH (FORMAT CSV, HEADER TRUE);
-1,1,5,1
-2,1,10,1
-3,2,4,1
-4,2,10,1
-5,3,11,1
-6,3,1,1
+COPY public.posts_genres (id, post_id, genre_id) FROM STDIN WITH (FORMAT CSV, HEADER FALSE);
+1,1,5
+2,1,10
+3,2,4
+4,2,10
+5,3,11
+6,3,1
 \.
 
 
@@ -176,13 +197,16 @@ ALTER TABLE ONLY public.posts_genres_users
 ------------------------------------------------------------------------------------------------------------
 
 -- Add relationship between posts and genres and users
-ALTER TABLE ONLY public.posts_genres_users
-    ADD CONSTRAINT posts_genres_users_post_id_fkey FOREIGN KEY (post_id) REFERENCES public.posts(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.posts_genres
+    ADD CONSTRAINT posts_genres_post_id_fkey FOREIGN KEY (post_id) REFERENCES public.posts(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
-ALTER TABLE ONLY public.posts_genres_users
-    ADD CONSTRAINT posts_genres_users_genre_id_fkey FOREIGN KEY (genre_id) REFERENCES public.genres(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.posts_genres
+    ADD CONSTRAINT posts_genres_genre_id_fkey FOREIGN KEY (genre_id) REFERENCES public.genres(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
-ALTER TABLE ONLY public.posts_genres_users
-    ADD CONSTRAINT posts_genres_users_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.posts_users
+    ADD CONSTRAINT posts_users_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+ALTER TABLE ONLY public.posts_users
+    ADD CONSTRAINT posts_users_post_id_fkey FOREIGN KEY (post_id) REFERENCES public.posts(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 ------------------------------------------------------------------------------------------------------------

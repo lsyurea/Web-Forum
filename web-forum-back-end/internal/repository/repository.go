@@ -10,6 +10,9 @@ type DatabaseRepo interface {
 	GetPosts(genre ...int) ([]*models.Post, error)
 	GetUserByUsername(username string) (*models.User, error)
 	GetUserByID(id int) (*models.User, error)
-	GetPostByID(id int) (*models.Post, error)
-	GetPostAndGenresByID(id int) (*models.Post, []*models.Genre, error)
+
+	OnePost(id int) (*models.Post, error)
+	OnePostForEdit(id int) (*models.Post, []*models.Genre, error)
+
+	GetPostsFromUser(id int) ([]*models.Post, error)
 }

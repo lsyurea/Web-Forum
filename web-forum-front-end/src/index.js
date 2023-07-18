@@ -6,6 +6,8 @@ import ErrorPage from './components/ErrorPage';
 import Login from './components/Login';
 import Create from './components/Create';
 import Posts from './components/Posts';
+import MyPosts from './components/MyPosts';
+import Post from './components/Post';
 
 const router = createBrowserRouter([
   {
@@ -22,6 +24,14 @@ const router = createBrowserRouter([
         path: '/login',
         element: <Login />,
       },
+      {
+        path: '/myposts',
+        element: <MyPosts />,
+      },
+      {
+        path: '/:id',
+        element: <Post />,
+      }
     ]
   }
 ])

@@ -102,7 +102,7 @@ return (
         </ul>
         <ul className="nav">
           <li className="nav-item">
-            <Link to="/" className="nav-link hover-white" >My Posts</Link>
+            <Link to="/myposts" className="nav-link hover-white" >My Posts</Link>
           </li>
           <li className="nav-item">
             <Link to="/" className="nav-link hover-white" >Latest News</Link>

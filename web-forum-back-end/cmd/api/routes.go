@@ -24,7 +24,8 @@ func (app *application) routes() http.Handler {
 
 	// Posts
 	mux.Get("/posts", app.AllPosts)
-	mux.Get("/posts/genres/{id}", app.AllPostsByGenre)
+	mux.Get("/posts/{id}", app.GetPost)
+	mux.Get("/posts/user/{id}", app.AllPostsByUser)
 	
 
 	// logged in user routes
@@ -32,6 +33,7 @@ func (app *application) routes() http.Handler {
 		mux.Use(app.authRequired)
 
 		// logged routes
+		mux.Get("/posts/{id}", app.PostForEdit)
 		
 	})
 
