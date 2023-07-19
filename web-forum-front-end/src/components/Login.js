@@ -29,7 +29,7 @@ function Login() {
             credentials: 'include',
             body: JSON.stringify(payload),
         }
-        fetch(`/authenticate`, requestOptions)
+        fetch(`${process.env.REACT_APP_BACKEND}/authenticate`, requestOptions)
         .then(response => {
             // console.log("response", response)    for debugging
             return response.json()})

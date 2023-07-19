@@ -11,7 +11,7 @@ const Post = (props) => {
             headers: headers,
         }
 
-        fetch(`/posts/${props.id}`, requestOptions)
+        fetch(`${process.env.REACT_APP_BACKEND}/posts/${props.id}`, requestOptions)
         .then(response => response.json())
         .then(data => {
             setPost(data);

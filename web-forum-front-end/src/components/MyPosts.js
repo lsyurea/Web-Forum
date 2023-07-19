@@ -23,7 +23,7 @@ function MyPosts() {
             method: "GET",
             headers: headers,
         }
-        fetch(`http://localhost:8080/posts/user/${userID}`, requestOptions)
+        fetch(`${process.env.REACT_APP_BACKEND}/posts/user/${userID}`, requestOptions)
         .then(response => response.json())
         .then(data => {
             setPosts(data);

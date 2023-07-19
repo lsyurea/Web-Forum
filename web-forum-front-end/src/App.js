@@ -17,7 +17,7 @@ function App() {
       method: "GET",
       credentials: "include",
     }
-    fetch(`/logout`, requestOptions)
+    fetch(`${process.env.REACT_APP_BACKEND}/logout`, requestOptions)
     .catch(error => {
       console.log("error logging out", error)
     })
@@ -38,7 +38,7 @@ const toggleRefresh = useCallback((status) => {
           method: "GET",
           credentials: "include",
         }
-        fetch(`/refresh`, requestOptions)
+        fetch(`${process.env.REACT_APP_BACKEND}/refresh`, requestOptions)
         .then(response => {
           return response.json()})
         .then(data => {
@@ -67,7 +67,7 @@ useEffect(() => {
       method: "GET",
       credentials: "include",
     }
-    fetch(`/refresh`, requestOptions)
+    fetch(`${process.env.REACT_APP_BACKEND}/refresh`, requestOptions)
     .then(response => {
       return response.json()})
     .then(data => {
