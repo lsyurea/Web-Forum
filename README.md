@@ -1,4 +1,6 @@
-# To start this project
+# Weebs - A one stop web forum for anime fanatics
+
+To begin the project locally:
 
 Clone this project
 
