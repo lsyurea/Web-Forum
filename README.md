@@ -12,3 +12,8 @@ To begin the project locally:
 6. Execute cd web-forum-back-end && docker-compose up -d
 7. Then execute go run ./cmd/api && cd ../web-formum-front-end && npm start to start development build
 
+Sample of how the project looks like:
+
+Login page:
+![Screenshot 2023-07-21 at 1 52 59 PM](https://github.com/lsyurea/Web-Forum/assets/96010792/99c6cc54-6aca-4341-9bd1-33aad2aefe9c)
+
